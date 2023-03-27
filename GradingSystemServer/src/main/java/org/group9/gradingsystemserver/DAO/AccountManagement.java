@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AccountManagement {
@@ -48,5 +49,13 @@ public class AccountManagement {
         }
     }
 
-
+    public Account getAccountById(String id) {
+        try {
+            UUID tmp = UUID.fromString(id);
+            return _accountRepository.getReferenceById(tmp);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

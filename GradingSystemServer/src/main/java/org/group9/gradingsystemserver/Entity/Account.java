@@ -2,6 +2,7 @@ package org.group9.gradingsystemserver.Entity;
 
 import lombok.*;
 import org.group9.gradingsystemserver.Entity.Enum.Role;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,6 +19,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
+    @Type(type = "uuid-char")
     private UUID id;
     @Column(name = "username")
     @NotNull

@@ -31,12 +31,12 @@ public class Class {
     private Teacher teacher;
     @ManyToMany
     @JoinTable(name = "class_assessment_group",
-            joinColumns = @JoinColumn(name = "assessment_group_code"),
-            inverseJoinColumns = @JoinColumn(name = "class_code"))
+            joinColumns = @JoinColumn(name = "class_code"),
+            inverseJoinColumns = @JoinColumn(name = "assessment_group_code"))
     private Set<AssessmentGroup> assessmentGroups;
     @ManyToMany
     @JoinTable(name = "student_class",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_code"))
+            joinColumns = @JoinColumn(name = "class_code"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<Student> students;
 }
