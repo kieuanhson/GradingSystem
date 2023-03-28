@@ -35,8 +35,7 @@ public class Account {
     private Role role;
     @Column(name = "status")
     @NotNull
-    @NonNull
-    private Boolean status;
+    private Boolean status = true;
     @OneToOne
     @JoinColumn(name = "id")
     private AccountDetails accountDetail;

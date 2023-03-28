@@ -2,6 +2,7 @@ package org.group9.gradingsystemserver.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,6 @@ public class Course {
     private int courseCredits;
     @OneToMany(mappedBy = "course")
     private Set<Class> classes;
+    @ManyToMany(mappedBy = "courses")
+    private Set<Curriculum> curriculum;
 }

@@ -24,24 +24,10 @@ public class AccountManagement {
     }
 
     public boolean addAccount(AccountDTO account) {
-        Account acc = new Account(account.getUsername(), account.getPassword(), account.getRole(), account.isStatus());
+        Account acc = new Account(account.getUsername(), account.getPassword(), account.getRole());
         if (_accountRepository.findAccountByUserName(account.getUsername()) != null) return false;
         try {
             _accountRepository.save(acc);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean deleteAccount(AccountDTO account) {
-        Account acc = _accountRepository.findAccountByUserName(account.getUsername());
-        if (acc == null) {
-            return false;
-        }
-        try {
-            _accountRepository.delete(acc);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());

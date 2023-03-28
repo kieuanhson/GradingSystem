@@ -6,6 +6,7 @@ import org.group9.gradingsystemserver.Entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,9 +29,11 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Account> getAccount(@PathVariable String id) {
+    public ResponseEntity<AccountDTO> getAccount(@PathVariable String id) {
         Account acc = _accountManagement.getAccountById(id);
-        return (acc != null ? new ResponseEntity<>(acc, HttpStatus.OK) : ResponseEntity.badRequest().build());
+        if (acc == null) return ResponseEntity.notFound().build();
+        AccountDTO response = new AccountDTO(acc.getUserName(), acc.getPassword(), acc.getRole(), acc.getStatus());
+        return (new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -38,6 +41,6 @@ public class AccountController {
         if (_accountManagement.addAccount(account)) {
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.internalServerError().build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

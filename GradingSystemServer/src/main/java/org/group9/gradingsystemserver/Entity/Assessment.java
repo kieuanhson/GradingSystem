@@ -23,10 +23,4 @@ public class Assessment {
     private float assessmentValue;
     @Column(name = "assessment_comment")
     private String assessmentComment;
-    @ManyToOne
-    @JoinColumn(name = "assessment_group")
-    private AssessmentGroup assessmentGroup;
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
 }

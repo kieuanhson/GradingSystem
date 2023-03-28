@@ -22,6 +22,7 @@ public class AssessmentGroup {
     private String assessmentGroupCode;
     @Column(name = "assessment_group_name")
     private String assessmentGroupName;
-    @OneToMany(mappedBy = "assessmentGroup")
+    @OneToMany
+    @JoinColumn(name = "assessment_group", referencedColumnName = "assessment_group_code")
     private Set<Assessment> assessment;
 }

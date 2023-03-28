@@ -25,11 +25,14 @@ public class Student {
     @NotNull
     private String studentCode;
     @OneToOne
+    private Curriculum curriculum;
+    @OneToOne
     @MapsId
     @JoinColumn(name = "acc_id")
     private Account acc;
     @ManyToMany(mappedBy = "students")
     private Set<Class> classes;
-    @OneToMany(mappedBy = "student")
+    @OneToMany
+    @JoinColumn(name = "student_id", referencedColumnName = "acc_id")
     private Set<Assessment> assessments;
 }
