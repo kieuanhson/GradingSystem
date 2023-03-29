@@ -29,25 +29,15 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<CourseDTO>> getAll() {
+    public ResponseEntity<List<Course>> getAll() {
         List<Course> courses = _courseManagement.getAll();
-        return getListResponseEntity(courses);
+        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<CourseDTO>> getCoursesByStudentId(@PathVariable String id) {
         if (_studentManagement.getStudentById(id) == null) return ResponseEntity.badRequest().build();
-        List<Course> courses = _courseManagement.getByStudentId(id);
-        return getListResponseEntity(courses);
-    }
-
-    private ResponseEntity<List<CourseDTO>> getListResponseEntity(List<Course> courses) {
-        List<CourseDTO> responses = new ArrayList<>();
-        for (Course course :
-                courses) {
-            CourseDTO tmp = new CourseDTO(Integer.toString(course.getCourseId()), course.getCourseName(), Integer.toString(course.getCourseCredits()));
-            responses.add(tmp);
-        }
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+        List<CourseDTO> courses = _courseManagement.getByStudentId(id);
+        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 }

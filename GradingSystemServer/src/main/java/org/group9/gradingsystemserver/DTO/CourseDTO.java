@@ -1,17 +1,9 @@
 package org.group9.gradingsystemserver.DTO;
 
+public interface CourseDTO {
+    String getCourseId();
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+    String getCourseName();
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class CourseDTO {
-    private String courseId;
-    private String courseName;
-    private String courseCredits;
+    int getCourseCredits();
 }

@@ -12,7 +12,6 @@ import org.group9.gradingsystemserver.Entity.Enum.Role;
 @AllArgsConstructor
 public class AccountDTO {
     private String username;
-    private String password;
     private Role role;
     private boolean status;
 }

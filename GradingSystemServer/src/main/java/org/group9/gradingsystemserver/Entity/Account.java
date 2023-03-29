@@ -24,7 +24,7 @@ public class Account {
     @Column(name = "username")
     @NotNull
     @NonNull
-    private String userName;
+    private String username;
     @Column(name = "password")
     @NotNull
     @NonNull
@@ -35,8 +35,18 @@ public class Account {
     private Role role;
     @Column(name = "status")
     @NotNull
-    private Boolean status = true;
+    @NonNull
+    private Boolean status;
     @OneToOne
     @JoinColumn(name = "id")
     private AccountDetails accountDetail;
+
+    @Builder
+    @SuppressWarnings("unused")
+    public Account(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        status = true;
+    }
 }

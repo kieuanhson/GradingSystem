@@ -1,12 +1,14 @@
 package org.group9.gradingsystemserver.Controllers;
 
 import org.group9.gradingsystemserver.DAO.AccountManagement;
+import org.group9.gradingsystemserver.DTO.AccountAddDTO;
 import org.group9.gradingsystemserver.DTO.AccountDTO;
+import org.group9.gradingsystemserver.DTO.AccountLoginDTO;
 import org.group9.gradingsystemserver.Entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,19 +30,32 @@ public class AccountController {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<AccountDTO> getAccount(@PathVariable String id) {
-        Account acc = _accountManagement.getAccountById(id);
-        if (acc == null) return ResponseEntity.notFound().build();
-        AccountDTO response = new AccountDTO(acc.getUserName(), acc.getPassword(), acc.getRole(), acc.getStatus());
-        return (new ResponseEntity<>(response, HttpStatus.OK));
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    public ResponseEntity<AccountDTO> getAccount(@PathVariable String username) {
+        AccountDTO account = _accountManagement.getAccountByUsername(username);
+        return (account == null ? ResponseEntity.notFound().build() : new ResponseEntity<>(account, HttpStatus.OK));
+
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<Account> addAccount(@Valid @RequestBody AccountDTO account) {
+    public ResponseEntity<Account> addAccount(@Valid @RequestBody AccountAddDTO account) {
         if (_accountManagement.addAccount(account)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> loginToSystem(@RequestBody AccountLoginDTO accountDTO) {
+        JSONObject object = new JSONObject();
+        AccountDTO account = _accountManagement.getAccountByUsername(accountDTO.getUsername());
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (!account.getPassword().equals(accountDTO.getPassword())) {
+            return ResponseEntity.status(406).build();
+        }
+        object.put("role",)
+        return ResponseEntity.ok().build();
     }
 }

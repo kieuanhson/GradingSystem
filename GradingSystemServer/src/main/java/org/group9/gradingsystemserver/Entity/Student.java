@@ -25,6 +25,7 @@ public class Student {
     @NotNull
     private String studentCode;
     @OneToOne
+    @JoinColumn(name = "cur_id", referencedColumnName = "cur_id")
     private Curriculum curriculum;
     @OneToOne
     @MapsId

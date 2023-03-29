@@ -1,5 +1,6 @@
 package org.group9.gradingsystemserver.DAO;
 
+import org.group9.gradingsystemserver.DTO.CourseDTO;
 import org.group9.gradingsystemserver.Entity.Course;
 import org.group9.gradingsystemserver.Repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class CourseManagement {
         return _courseRepository.findAll();
     }
 
-    public List<Course> getByStudentId(String id) {
-        return _courseRepository.getAllByStudentId(id);
+    public List<CourseDTO> getByStudentId(String id) {
+        return _courseRepository.getCourseDTOByStudentId(id);
     }
 }
