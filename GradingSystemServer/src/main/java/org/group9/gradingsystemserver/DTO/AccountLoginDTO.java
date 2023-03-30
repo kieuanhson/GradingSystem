@@ -13,5 +13,4 @@ import org.group9.gradingsystemserver.Entity.Enum.Role;
 public class AccountLoginDTO {
     private String username;
     private String password;
-    private Role role;
 }

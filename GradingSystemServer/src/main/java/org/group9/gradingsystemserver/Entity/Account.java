@@ -2,6 +2,8 @@ package org.group9.gradingsystemserver.Entity;
 
 import lombok.*;
 import org.group9.gradingsystemserver.Entity.Enum.Role;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -38,7 +40,7 @@ public class Account {
     @NonNull
     private Boolean status;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", referencedColumnName = "acc_id")
     private AccountDetails accountDetail;
 
     @Builder

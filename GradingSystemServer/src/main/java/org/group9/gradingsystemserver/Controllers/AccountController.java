@@ -6,13 +6,19 @@ import org.group9.gradingsystemserver.DTO.AccountDTO;
 import org.group9.gradingsystemserver.DTO.AccountLoginDTO;
 import org.group9.gradingsystemserver.Entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/account")
@@ -24,19 +30,6 @@ public class AccountController {
         _accountManagement = accountManagement;
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        List<Account> accounts = _accountManagement.getAll();
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public ResponseEntity<AccountDTO> getAccount(@PathVariable String username) {
-        AccountDTO account = _accountManagement.getAccountByUsername(username);
-        return (account == null ? ResponseEntity.notFound().build() : new ResponseEntity<>(account, HttpStatus.OK));
-
-    }
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<Account> addAccount(@Valid @RequestBody AccountAddDTO account) {
         if (_accountManagement.addAccount(account)) {
@@ -45,17 +38,24 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> loginToSystem(@RequestBody AccountLoginDTO accountDTO) {
-        JSONObject object = new JSONObject();
-        AccountDTO account = _accountManagement.getAccountByUsername(accountDTO.getUsername());
-        if (account == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Account>> getAll() {
+        return new ResponseEntity<>(_accountManagement.getAll(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, String>> loginToSystem(@RequestBody AccountLoginDTO accountDTO) {
+        Optional<Account> account = _accountManagement.getAccountInfoByUsername(accountDTO.getUsername());
+        if (!account.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
-        if (!account.getPassword().equals(accountDTO.getPassword())) {
-            return ResponseEntity.status(406).build();
+        if (!account.get().getPassword().equals(accountDTO.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        object.put("role",)
-        return ResponseEntity.ok().build();
+        Map<String, String> body = new HashMap<>();
+        body.put("id", account.get().getId().toString());
+        body.put("role", account.get().getRole().toString());
+        body.put("displayName", account.get().getAccountDetail().getFullName());
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -19,6 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AccountDetails {
     @Id
+    @Type(type = "uuid-char")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "acc_id")
     @NotNull
     private UUID acc_id;
@@ -36,7 +39,7 @@ public class AccountDetails {
     private LocalDate birthDate;
     @Column(name = "gender")
     @NotNull
-    private Boolean gender;
+    private String gender;
 
     public String getFullName() {
         return firstName + " " + middleName + " " + lastName;

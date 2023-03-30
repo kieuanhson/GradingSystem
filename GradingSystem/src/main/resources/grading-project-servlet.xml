@@ -10,6 +10,7 @@
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <context:component-scan base-package="org.group9.homeschooling"/>
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
     <bean id="uriBuilderFactory" class="org.springframework.web.util.DefaultUriBuilderFactory">
         <constructor-arg value="http://localhost:8080"/>
     </bean>

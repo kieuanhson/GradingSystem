@@ -7,11 +7,15 @@ import org.group9.gradingsystemserver.Entity.Account;
 import org.group9.gradingsystemserver.Repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class AccountManagement {
 
     private final AccountRepository _accountRepository;
@@ -21,38 +25,23 @@ public class AccountManagement {
         _accountRepository = accountRepository;
     }
 
-    public List<Account> getAll() {
+    public Iterable<Account> getAll() {
         return _accountRepository.findAll();
     }
 
+    public Optional<Account> getAccountInfoByUsername(String username) {
+        return _accountRepository.findAccountByUsername(username);
+    }
 
     public boolean addAccount(@NotNull AccountAddDTO account) {
-        Account acc = new Account(account.getUsername(), account.getPassword(), account.getRole(), account.isStatus());
-        if (_accountRepository.findAccountByUsername(acc.getUsername()) != null) return false;
+        if (!_accountRepository.findAccountByUsername(account.getUsername()).isPresent()) return false;
+        Account acc = new Account(account.getUsername(), account.getPassword(), account.getRole());
         try {
             _accountRepository.save(acc);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
-        }
-    }
-
-    public AccountDTO getAccountByUsername(String username) {
-        try {
-            return _accountRepository.findAccountByUsername(username);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    public AccountLoginDTO findLoginInfoByUserName(String username) {
-        try {
-            return _accountRepository.getLoginInfoByUsername(username);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
         }
     }
 }
